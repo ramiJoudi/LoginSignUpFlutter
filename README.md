@@ -1,6 +1,6 @@
-# xdtflutter
+# Flutter login and registration using firebase 
 
-A new Flutter project.
+A new Flutter project :smiling_face_with_three_hearts:.
 
 ## Getting Started
 
