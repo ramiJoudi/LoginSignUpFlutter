@@ -1,79 +1,78 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:adobe_xd/pinned.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:xdtflutter/DashboardScreen.dart';
+import 'package:xdtflutter/register.dart';
+import 'main.dart';
+
+import 'Services/AuthService.dart';
 
 class iPhone6781 extends StatelessWidget {
   iPhone6781({
     Key? key,
   }) : super(key: key);
+  final AuthService auth = AuthService();
+  TextEditingController _emailContoller = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff081e5a),
+      backgroundColor: const Color(0xff8f4b9e),
       body: Stack(
         children: <Widget>[
           Pinned.fromPins(
-            Pin(start: 37.0, end: 37.0),
-            Pin(size: 181.0, start: 79.0),
-            child:
-                // Adobe XD layer: 'Fichier 15' (shape)
-                Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: const AssetImage('assets/images/pland.png'),
-                  fit: BoxFit.fill,
-                ),
+            Pin(size: 102.0, middle: 0.5018),
+            Pin(size: 44.0, middle: 0.2151),
+            child: Text(
+              'Login ',
+              style: TextStyle(
+                fontFamily: 'Ebrima',
+                fontSize: 35,
+                color: const Color(0xffffffff),
+                fontWeight: FontWeight.w700,
               ),
+              textAlign: TextAlign.left,
             ),
           ),
           Pinned.fromPins(
-            Pin(start: 41.0, end: 37.0),
-            Pin(size: 275.0, end: 96.0),
-            child: Stack(
-              children: <Widget>[
-                Pinned.fromPins(
-                  Pin(start: 0.0, end: 0.0),
-                  Pin(start: 45.0, end: 0.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(41.0),
-                      color: const Color(0xffffffff),
-                      border: Border.all(
-                          width: 1.0, color: const Color(0xff707070)),
-                    ),
-                  ),
-                ),
-                Pinned.fromPins(
-                  Pin(size: 97.0, middle: 0.49),
-                  Pin(size: 90.0, start: 0.0),
-                  child:
-                      // Adobe XD layer: 'Fichier 16' (shape)
-                      Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: const AssetImage('assets/images/pl.png'),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            Pin(start: 51.0, end: 55.0),
+            Pin(size: 43.0, middle: 0.3958),
+            child: TextFormField(
+              controller: _emailContoller,
+              validator: (value) {
+                if (value == null) {
+                  return 'Email cannot be empty';
+                } else
+                  return null;
+              },
+              decoration: InputDecoration(
+                  labelText: 'Email',
+                  labelStyle: TextStyle(color: Colors.white)),
+              style: TextStyle(color: Colors.white),
             ),
           ),
           Pinned.fromPins(
-              Pin(start: 67.0, end: 66.0), Pin(size: 32.0, middle: 0.6362),
-              child: TextField(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(), hintText: 'Username'),
-              )),
+            Pin(start: 51.0, end: 55.0),
+            Pin(size: 38.0, middle: 0.5103),
+            child: TextFormField(
+              controller: _passwordController,
+              validator: (value) {
+                if (value == null) {
+                  return 'Email cannot be empty';
+                } else
+                  return null;
+              },
+              decoration: InputDecoration(
+                  labelText: 'Password',
+                  labelStyle: TextStyle(color: Colors.white)),
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
           Pinned.fromPins(
-              Pin(start: 67.0, end: 66.0), Pin(size: 30.0, middle: 0.7127),
-              child: TextField(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(), hintText: 'Password'),
-              )),
-          Pinned.fromPins(
-            Pin(size: 114.0, middle: 0.5019),
-            Pin(size: 44.0, middle: 0.8058),
+            Pin(size: 102.0, middle: 0.5018),
+            Pin(size: 44.0, middle: 0.6677),
             child: Stack(
               children: <Widget>[
                 Pinned.fromPins(
@@ -85,21 +84,54 @@ class iPhone6781 extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
                               side: BorderSide(color: Colors.blueGrey)),
-                          color: const Color(0xff081e5a),
+                          color: const Color(0xffffffff),
                           child: Text(
                             'Login',
-                            style:
-                                TextStyle(fontSize: 20.0, color: Colors.white),
+                            style: TextStyle(
+                                fontSize: 15.0, color: const Color(0xff081e5a)),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            login(context);
+                          },
                         ),
                       ),
-                    ))
+                    )),
               ],
+            ),
+          ),
+          Pinned.fromPins(
+            Pin(size: 159.0, end: 55.0),
+            Pin(size: 20.0, middle: 0.5641),
+            child: FlatButton(
+              child: Text('Not registerd? Sign up'),
+              onPressed: () {
+                Navigator.of(context).push(
+                  CupertinoPageRoute(
+                    // fullscreenDialog: true,
+                    builder: (context) => register(),
+                  ),
+                );
+              },
+              textColor: Colors.white,
             ),
           ),
         ],
       ),
     );
+  }
+
+  void login(BuildContext context) async {
+    dynamic result1 =
+        await auth.loginUser(_emailContoller.text, _passwordController.text);
+    if (result1 == null) {
+      Fluttertoast.showToast(
+        msg: "Bad credential ",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.blue,
+      );
+    } else if (result1 != null) {
+      Navigator.pushNamed(context, '/dashboard');
+    }
   }
 }
